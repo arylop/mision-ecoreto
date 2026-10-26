@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Misión Eco-Reto</title>
+<style>
+:root{--v:#16866f;--d:#174d4b;--f:#e8f8f2;--t:#244345}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3faf7;color:var(--t)}
+header{background:linear-gradient(110deg,#104e4a,#27a98b);color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:25px}header p{margin:5px 0 0;color:#ddfff3}
+nav{display:flex;gap:7px;flex-wrap:wrap}nav button{background:#ffffff20;color:white;border:1px solid #ffffff70;border-radius:20px;padding:9px 12px}
+button{border:0;border-radius:10px;padding:11px 15px;background:var(--v);color:white;font-weight:bold;cursor:pointer}
+button:hover{filter:brightness(.94)}.danger{background:#c94f63}.secondary{background:#477f9c}
+.hero{padding:32px 6%;background:linear-gradient(120deg,#d8f7ec,#e8f5ff);display:flex;justify-content:space-between;align-items:center;gap:20px}
+.hero h2{font-size:clamp(27px,5vw,40px);color:var(--d);margin:0 0 10px}.hero p{line-height:1.5}.earth{font-size:95px}
+main{width:min(1100px,92%);margin:25px auto}
+.auth{width:min(430px,94%);margin:35px auto;background:white;padding:26px;border-radius:20px;box-shadow:0 8px 25px #174d4b18;text-align:center}
+.auth .big{font-size:55px}.auth h2{color:var(--d)}
+label{display:block;text-align:left;font-weight:bold;margin:12px 0 6px;color:var(--d)}
+input,select,textarea{width:100%;padding:12px;border:1px solid #c9e1d9;border-radius:10px;font:inherit;background:#fbfffd;color:var(--t)}
+textarea{min-height:80px}
+.auth input{margin-bottom:4px}
+.link{color:var(--v);font-weight:bold;cursor:pointer;text-decoration:underline}
+.msg{padding:10px;border-radius:10px;background:#e6f7ef;margin:10px 0}.error{background:#ffe8ec;color:#8d2639}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.card{background:white;padding:18px;border-radius:16px;text-align:center;box-shadow:0 4px 15px #174d4b12;border-bottom:4px solid #35b99a}
+.card span{font-size:30px}.card strong{display:block;font-size:25px;color:var(--v);margin:7px}
+.panel{background:white;padding:22px;border-radius:18px;margin-top:20px;box-shadow:0 4px 15px #174d4b12}
+h2{color:var(--d)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+table{width:100%;border-collapse:collapse;min-width:650px}th,td{padding:10px;border-bottom:1px solid #dcece6;text-align:left;font-size:14px}th{background:#e5f7f0;color:#155b50}
+.tablewrap{overflow-x:auto}.hidden{display:none!important}.subtle{color:#607a74;font-size:14px}
+footer{text-align:center;background:#124d49;color:white;padding:20px;margin-top:35px}
+@media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}.earth{font-size:65px}.hero{padding:25px 5%}}
+@media(max-width:480px){.cards,.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.hero{align-items:flex-start}.earth{display:none}header h1{font-size:21px}}
+</style>
+</head>
+<body>
+<header>
+<div><h1>🌎 Misión Eco-Reto</h1><p>Pequeñas acciones, grandes cambios</p></div>
+<nav id="menu" class="hidden">
+<button onclick="mostrar('inicio')">Inicio</button>
+<button onclick="mostrar('acciones')">Mis acciones</button>
+<button onclick="mostrar('nueva')">Nueva acción</button>
+<button onclick="mostrar('estadisticas')">Estadísticas</button>
+<button onclick="cerrarSesion()">Cerrar sesión</button>
+</nav>
+</header>
+
+<section id="acceso">
+<div id="login" class="auth">
+<div class="big">🌱</div><h2>Iniciar sesión</h2>
+<p class="subtle">Entra a tu espacio ecológico.</p>
+<div id="mensajeLogin"></div>
+<form onsubmit="iniciar(event)">
+<label>Usuario</label><input id="usuarioLogin" required autocomplete="username" placeholder="Escribe tu usuario">
+<label>Contraseña</label><input id="passLogin" type="password" required autocomplete="current-password" placeholder="Escribe tu contraseña">
+<button style="width:100%;margin-top:15px">Entrar</button>
+</form>
+<p>¿No tienes cuenta? <span class="link" onclick="verRegistro()">Crear cuenta</span></p>
+</div>
+<div id="registro" class="auth hidden">
+<div class="big">🌍</div><h2>Crear cuenta</h2>
+<p class="subtle">Regístrate para comenzar tu reto.</p>
+<div id="mensajeRegistro"></div>
+<form onsubmit="crearCuenta(event)">
+<label>Usuario</label><input id="usuarioNuevo" minlength="3" required placeholder="Crea un usuario">
+<label>Contraseña</label><input id="passNuevo" type="password" minlength="8" required placeholder="Mínimo 8 caracteres">
+<label>Confirmar contraseña</label><input id="confirmar" type="password" minlength="8" required placeholder="Repite tu contraseña">
+<button style="width:100%;margin-top:15px">Crear cuenta</button>
+</form>
+<p>¿Ya tienes cuenta? <span class="link" onclick="verLogin()">Iniciar sesión</span></p>
+</div>
+</section>
+
+<section id="app" class="hidden">
+<div class="hero" id="vista-inicio"><div><h2>¡Hola, <span id="saludo"></span>! 🌿</h2><p>Bienvenido/a a Misión Eco-Reto. Cada pequeño hábito puede generar un gran cambio para nuestro planeta.</p><button onclick="mostrar('nueva')">＋ Registrar una acción</button></div><div class="earth">🌎🌱</div></div>
+<main>
+<section id="vista-estadisticas" class="panel hidden">
+<h2>📊 Mis estadísticas</h2>
+<div class="cards">
+<div class="card"><span>🌿</span><strong id="total">0</strong>Acciones registradas</div>
+<div class="card"><span>💧</span><strong id="agua">0 L</strong>Agua ahorrada</div>
+<div class="card"><span>♻️</span><strong id="reciclaje">0 kg</strong>Material reciclado</div>
+<div class="card"><span>🌳</span><strong id="plantas">0</strong>Plantas registradas</div>
+</div></section>
+
+<section id="vista-nueva" class="panel hidden">
+<h2>📝 Nueva acción ecológica</h2>
+<form id="formAccion" onsubmit="guardarAccion(event)">
+<div class="formgrid">
+<div><label>Tipo de acción</label><select id="tipo"><option>Reciclaje</option><option>Ahorro de agua</option><option>Reforestación</option><option>Energía responsable</option><option>Transporte sostenible</option><option>Limpieza comunitaria</option></select></div>
+<div><label>Fecha</label><input type="date" id="fecha" required></div>
+<div class="full"><label>Descripción</label><textarea id="descripcion" required placeholder="Describe la actividad que realizaste..."></textarea></div>
+<div><label>Cantidad</label><input type="number" id="cantidad" min="0" step="0.1" value="1" required></div>
+<div><label>Unidad</label><select id="unidad"><option value="kg">Kilogramos (kg)</option><option value="litros">Litros (L)</option><option value="plantas">Plantas</option><option value="veces">Veces</option></select></div>
+</div><br><button>Guardar acción 💚</button>
+</form></section>
+
+<section id="vista-acciones" class="panel hidden">
+<h2>📋 Mis acciones</h2><input id="buscar" placeholder="Buscar por tipo o descripción..." oninput="renderAcciones()"><br><br>
+<div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Cantidad</th><th>Opciones</th></tr></thead><tbody id="tabla"></tbody></table></div>
+<p id="vacio" class="subtle">Todavía no tienes acciones registradas.</p>
+</section>
+</main>
+</section>
+<footer>🌎 Misión Eco-Reto · ¡Cuidemos el planeta juntos!</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+let usuarioActual=null, editando=null;
+const leer=(k,def)=>{try{return JSON.parse(localStorage.getItem(k))??def}catch{return def}};
+const guardar=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+function verRegistro(){$('login').classList.add('hidden');$('registro').classList.remove('hidden');$('mensajeRegistro').textContent='';}
+function verLogin(){$('registro').classList.add('hidden');$('login').classList.remove('hidden');$('mensajeLogin').textContent='';}
+function mensaje(id,txt,error=false){$(id).textContent=txt;$(id).className=error?'msg error':'msg';}
+function crearCuenta(e){
+e.preventDefault();
+const u=$('usuarioNuevo').value.trim(),p=$('passNuevo').value,c=$('confirmar').value;
+if(p!==c){mensaje('mensajeRegistro','Las contraseñas no coinciden.',true);return}
+if(p.length<8){mensaje('mensajeRegistro','La contraseña debe tener al menos 8 caracteres.',true);return}
+const cuentas=leer('eco_cuentas',[]);
+if(cuentas.some(x=>x.usuario.toLowerCase()===u.toLowerCase())){mensaje('mensajeRegistro','Ese usuario ya existe.',true);return}
+cuentas.push({usuario:u,clave:p});
+guardar('eco_cuentas',cuentas);
+mensaje('mensajeRegistro','¡Cuenta creada! Ahora inicia sesión.');
+setTimeout(verLogin,900);
+}
+function iniciar(e){
+e.preventDefault();
+const u=$('usuarioLogin').value.trim(),p=$('passLogin').value;
+const cuenta=leer('eco_cuentas',[]).find(x=>x.usuario.toLowerCase()===u.toLowerCase()&&x.clave===p);
+if(!cuenta){mensaje('mensajeLogin','Usuario o contraseña incorrectos.',true);return}
+usuarioActual=cuenta.usuario;
+$('acceso').classList.add('hidden');$('app').classList.remove('hidden');$('menu').classList.remove('hidden');$('saludo').textContent=usuarioActual;
+$('fecha').value=new Date().toISOString().slice(0,10);
+mostrar('inicio');actualizar();
+}
+function claveAcciones(){return 'eco_acciones_'+usuarioActual}
+function misAcciones(){return leer(claveAcciones(),[])}
+function mostrar(v){
+['inicio','acciones','nueva','estadisticas'].forEach(x=>{
+const el=$('vista-'+x);if(el)el.classList.toggle('hidden',x!==v);
+});
+if(v==='acciones')renderAcciones();
+if(v==='estadisticas')actualizar();
+window.scrollTo({top:0,behavior:'smooth'});
+}
+function guardarAccion(e){
+e.preventDefault();
+const a={id:editando??Date.now(),tipo:$('tipo').value,fecha:$('fecha').value,descripcion:$('descripcion').value.trim(),cantidad:Number($('cantidad').value),unidad:$('unidad').value};
+if(!a.descripcion||!a.fecha||a.cantidad<0){alert('Revisa los datos.');return}
+let lista=misAcciones();
+if(editando!==null){lista=lista.map(x=>x.id===editando?a:x);editando=null}else lista.unshift(a);
+guardar(claveAcciones(),lista);
+$('formAccion').reset();$('fecha').value=new Date().toISOString().slice(0,10);
+$('formAccion').querySelector('button').textContent='Guardar acción 💚';
+actualizar();alert('¡Acción guardada!');mostrar('acciones');
+}
+function renderAcciones(){
+const q=($('buscar').value||'').toLowerCase(),lista=misAcciones().filter(a=>(a.tipo+' '+a.descripcion+' '+a.fecha).toLowerCase().includes(q));
+$('tabla').replaceChildren();
+lista.forEach(a=>{
+const tr=document.createElement('tr');
+[a.fecha,a.tipo,a.descripcion,a.cantidad+' '+a.unidad].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});
+const td=document.createElement('td');
+const ed=document.createElement('button');ed.className='secondary';ed.textContent='Editar';ed.onclick=()=>editar(a.id);
+const del=document.createElement('button');del.className='danger';del.textContent='Eliminar';del.onclick=()=>eliminar(a.id);
+td.append(ed,del);tr.appendChild(td);$('tabla').appendChild(tr);
+});
+$('vacio').classList.toggle('hidden',lista.length>0);
+}
+function editar(id){
+const a=misAcciones().find(x=>x.id===id);if(!a)return;editando=id;
+$('tipo').value=a.tipo;$('fecha').value=a.fecha;$('descripcion').value=a.descripcion;$('cantidad').value=a.cantidad;$('unidad').value=a.unidad;
+$('formAccion').querySelector('button').textContent='Actualizar acción';mostrar('nueva');
+}
+function eliminar(id){
+if(!confirm('¿Eliminar esta acción?'))return;
+guardar(claveAcciones(),misAcciones().filter(a=>a.id!==id));renderAcciones();actualizar();
+}
+function actualizar(){
+const a=misAcciones(),suma=(tipo,unidad)=>a.filter(x=>x.tipo===tipo&&x.unidad===unidad).reduce((s,x)=>s+x.cantidad,0);
+$('total').textContent=a.length;$('agua').textContent=suma('Ahorro de agua','litros')+' L';$('reciclaje').textContent=suma('Reciclaje','kg')+' kg';$('plantas').textContent=suma('Reforestación','plantas');
+}
+function cerrarSesion(){usuarioActual=null;$('app').classList.add('hidden');$('menu').classList.add('hidden');$('acceso').classList.remove('hidden');$('passLogin').value='';verLogin();}
+</script>
+</body>
+</html>
